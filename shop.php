@@ -3,10 +3,12 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 // fetch all products from db ..
-include 'connect.php';
-$sql = 'select id, product_code, product_uuid,product_name, description, price, photo, created_on, updated_on, is_active FROM products';
-$result = $mysqli->query($sql);
 
+require './vendor/autoload.php';
+use Eshop\Database;
+
+$dbconnection = new Database();
+$result = $dbconnection->listProducts();
 ?>
 <!DOCTYPE html>
 <html lang="en">

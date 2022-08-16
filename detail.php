@@ -1,20 +1,23 @@
 <?php
-if (isset($_GET['pid'])) {
-    include 'connect.php';
-    $puuid = $_GET['pid'];
-    //get product by uuid..
-    $sql = "select id, product_code, product_uuid,product_name, description, price, photo, created_on, updated_on, is_active FROM products WHERE product_uuid='".$puuid."'";
-    $result = $mysqli->query($sql);
-    $pdt_info = mysqli_fetch_object($result);
-    $product_uuid = $pdt_info->product_uuid;
-    $product_code = $pdt_info->product_code;
-    $product_name = $pdt_info->product_name;
-    $description = $pdt_info->description;
-    $price = $pdt_info->price;
-    $photo = $pdt_info->photo;
-    //get list of products ..
-    $pdt_sql = 'select id, product_code, product_uuid,product_name, description, price, photo, created_on, updated_on, is_active FROM products';
-    $list_pdts = $mysqli->query($pdt_sql); ?>
+require './vendor/autoload.php';
+use Eshop\Database;
+
+    if (isset($_GET['pid'])) {
+        $puuid = $_GET['pid'];
+
+        $dbconnection = new Database();
+
+        //get product by uuid..
+
+        $pdt_info = $dbconnection->getProductInfo($puuid);
+        $product_uuid = $pdt_info->product_uuid;
+        $product_code = $pdt_info->product_code;
+        $product_name = $pdt_info->product_name;
+        $description = $pdt_info->description;
+        $price = $pdt_info->price;
+        $photo = $pdt_info->photo;
+        //get list of products ..
+        $list_pdts = $dbconnection->listProducts(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -197,7 +200,7 @@ if (isset($_GET['pid'])) {
 
 </html>
 <?php
-} else {
-                        echo 'No product found !';
-                    }
+    } else {
+        echo 'No product found !';
+    }
 ?>

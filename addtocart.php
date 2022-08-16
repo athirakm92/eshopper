@@ -3,7 +3,8 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_start();
-include 'connect.php';
+require './vendor/autoload.php';
+use Eshop\Database;
 
 switch ($_GET['action']) {
     case 'add':
@@ -14,9 +15,12 @@ switch ($_GET['action']) {
                 $quantity = $_POST['quantity'];
             }
             $puuid = $_GET['puuid'];
-            $result = $mysqli->query("select id, product_code, product_uuid,product_name, photo,price FROM products WHERE product_uuid='".$puuid."'");
+            $dbconnection = new Database();
 
-            $pdt_info = $result->fetch_array(MYSQLI_ASSOC);
+            //get product by uuid..
+
+            $pdt_info = $dbconnection->getProductDetails($puuid);
+
             $itemArray = [$pdt_info['product_uuid'] => ['product_name' => $pdt_info['product_name'], 'code' => $pdt_info['product_code'], 'quantity' => $quantity, 'price' => $pdt_info['price'], 'photo' => $pdt_info['photo']]];
 
             if (!empty($_SESSION['cart_item'])) {
