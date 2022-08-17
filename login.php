@@ -1,8 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-session_start();
-require './vendor/autoload.php';
+require './vendor/autoload.php'; session_start();
 use Eshop\Login;
 use Eshop\Register;
 
@@ -12,9 +11,9 @@ if (isset($_POST['login'])) {
 
     if (!empty($result['success'])) {
         print_r($result);
+        // print_r($_SESSION['userid']);
     }
 }
-
 if (isset($_POST['register'])) {
     $register = new Register();
     $result = $register->userRegister($_POST);

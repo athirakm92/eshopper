@@ -30,13 +30,14 @@ class Users
         $columns = implode(', ', array_keys($data));
         $values = implode("', '", $data);
 
-        return $this->dbconnection->queryDB("INSERT INTO `users`($columns) VALUES ('$values')");
+        $insertquery = $this->dbconnection->queryDB("INSERT INTO `users`($columns) VALUES ('$values')");
+
+        return $insertquery->fetchColumn();
     }
 
     public function checkEmail($email)
     {
         $result = $this->dbconnection->queryDB("select id, user_uuid FROM users WHERE email='".$email."'");
-        $userinfo = [];
         $rowcount = $result->fetchColumn();
 
         return $rowcount;

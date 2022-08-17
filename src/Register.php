@@ -4,8 +4,11 @@ namespace Eshop;
 
 class Register
 {
+    private $users;
+
     public function __construct()
     {
+        $this->users = new Users();
     }
 
     public function userRegister($data)
@@ -23,8 +26,7 @@ class Register
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $result['error'] = 'Invalid email format';
         } else {
-            $users = new Users();
-            $rescheckemail = $users->checkEmail($email);
+            $rescheckemail = $this->users->checkEmail($email);
             if ($rescheckemail == 0) {
                 $password = md5($password);
                 $uuid = uniqid();
@@ -38,11 +40,12 @@ class Register
                     'phone_number' => $phonenumber,
                 ];
 
-                $resultinsert = $users->insertUser($data);
+                $resultinsert = $this->users->insertUser($data);
                 if (empty($resultinsert)) {
                     $result['error'] = 'An error occured';
                 } else {
                     $result['success'] = 'Successfully added';
+                    $_SESSION['userid'] = $resultinsert;
                 }
             } else {
                 $result['error'] = 'Email already exist';

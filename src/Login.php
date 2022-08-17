@@ -4,8 +4,11 @@ namespace Eshop;
 
 class Login
 {
+    private $users;
+
     public function __construct()
     {
+        $this->users = new Users();
     }
 
     public function userLogin($data)
@@ -18,13 +21,13 @@ class Login
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $result['error'] = 'Invalid email format';
         } else {
-            $users = new Users();
             $password = md5($password);
-            $resultlogin = $users->checkUser($email, $password);
+            $resultlogin = $this->users->checkUser($email, $password);
             if (empty($resultlogin)) {
                 $result['error'] = 'Invalid email and password';
             } else {
                 $result['success'] = $resultlogin;
+                $_SESSION['userid'] = $resultlogin['id'];
             }
         }
 
