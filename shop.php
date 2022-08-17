@@ -5,10 +5,10 @@ error_reporting(E_ALL);
 // fetch all products from db ..
 
 require './vendor/autoload.php';
-use Eshop\Database;
+use Eshop\Products;
 
-$dbconnection = new Database();
-$result = $dbconnection->listProducts();
+$products = new Products();
+$result = $products->listProducts();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -115,7 +115,7 @@ $result = $dbconnection->listProducts();
                     <?php
 
                     if ($result != null) {
-                        while ($row = $result->fetch_assoc()) {
+                        while ($row = $result->fetch()) {
                             ?>
                             <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
                                 <div class="card product-item border-0 mb-4">

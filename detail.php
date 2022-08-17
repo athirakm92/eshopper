@@ -1,23 +1,23 @@
 <?php
 require './vendor/autoload.php';
-use Eshop\Database;
+use Eshop\Products;
 
     if (isset($_GET['pid'])) {
         $puuid = $_GET['pid'];
 
-        $dbconnection = new Database();
+        $products = new Products();
 
         //get product by uuid..
-
-        $pdt_info = $dbconnection->getProductInfo($puuid);
-        $product_uuid = $pdt_info->product_uuid;
-        $product_code = $pdt_info->product_code;
-        $product_name = $pdt_info->product_name;
-        $description = $pdt_info->description;
-        $price = $pdt_info->price;
-        $photo = $pdt_info->photo;
+        $result = $products->getProductInfo($puuid);
+        $pdt_info = $result->fetch();
+        $product_uuid = $pdt_info['product_uuid'];
+        $product_code = $pdt_info['product_code'];
+        $product_name = $pdt_info['product_name'];
+        $description = $pdt_info['description'];
+        $price = $pdt_info['price'];
+        $photo = $pdt_info['photo'];
         //get list of products ..
-        $list_pdts = $dbconnection->listProducts(); ?>
+        $list_pdts = $products->listProducts(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -146,7 +146,7 @@ use Eshop\Database;
                 <div class="owl-carousel related-carousel">
                     <?php
                     if ($list_pdts != null) {
-                        while ($row = $list_pdts->fetch_assoc()) {
+                        while ($row = $list_pdts->fetch()) {
                             ?>
                         <div class="card product-item border-0">
                             <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">

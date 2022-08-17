@@ -2,12 +2,33 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_start();
+require './vendor/autoload.php';
+use Eshop\Login;
+use Eshop\Register;
 
+if (isset($_POST['login'])) {
+    $login = new Login();
+    $result = $login->userLogin($_POST);
+
+    if (!empty($result['success'])) {
+        print_r($result);
+    }
+}
+
+if (isset($_POST['register'])) {
+    $register = new Register();
+    $result = $register->userRegister($_POST);
+
+    if (!empty($result['success'])) {
+        print_r($result);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
-<?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php'; ?> 
+<link href="scss/style.scss" rel="stylesheet">
 
 <body>
     <?php include 'includes/topbar.php'; ?>
@@ -19,42 +40,57 @@ session_start();
     <!-- Page Header Start -->
     <div class="container-fluid bg-secondary mb-5">
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
-            <h1 class="font-weight-semi-bold text-uppercase mb-3">Shopping Cart</h1>
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Login</h1>
             <div class="d-inline-flex">
                 <p class="m-0"><a href="">Home</a></p>
                 <p class="m-0 px-2">-</p>
-                <p class="m-0">Shopping Cart</p>
+                <p class="m-0">Login</p>
             </div>
         </div>
     </div>
     <!-- Page Header End -->
 
 
-    <div class="wrapper fadeInDown">
-  <div id="formContent">
-    <!-- Tabs Titles -->
-    <h2 class="active"> Sign In </h2>
-    <h2 class="inactive underlineHover">Sign Up </h2>
+    <div class="wrapper ">
+      <?php
+        if (isset($result) && $result['error'] != '') {
+            echo $result['error'];
+        }
+      ?>
+      <div id="formContent" class="logincontainer">
+        <!-- Tabs Titles -->
+        <h2 id="loginbtn" class="active underlineHover"> Login </h2>
+        <h2 id="registerbtn" class="inactive underlineHover">Register </h2>
 
-    <!-- Icon -->
-    <div class="fadeIn first">
-      <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
+        <!-- Login Form -->
+        <div id="loginblock">
+          <form action="" method="post">
+            <input type="text" id="email" class=" second" name="email" placeholder="Email">
+            <input type="text" id="password" class=" third" name="password" placeholder="password">
+            <input type="submit" name="login" class=" fourth" value="Log In">
+          </form>
+        </div>
+        <!-- Register Form -->
+        <div id="registerblock" >
+          <form action="" method="post">
+
+          <input type="text" id="firstname" class=" second" name="firstname" placeholder="First Name">
+          <input type="text" id="lastname" class=" second" name="lastname" placeholder="Last Name">
+            <input type="text" id="email" class=" second" name="email" placeholder="Email">
+            <input type="text" id="password" class=" third" name="password" placeholder="Password">
+          <input type="text" id="phonenumber" class=" second" name="phonenumber" placeholder="Phone Number">
+          <input type="text" id="address" class=" second" name="address" placeholder="Address">
+            <input type="submit" name="register" class=" fourth" value="Register">
+          </form>
+        </div>
+
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+          <a class="underlineHover" href="#">Forgot Password?</a>
+        </div>
+
+      </div>
     </div>
-
-    <!-- Login Form -->
-    <form>
-      <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
-      <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
-    </form>
-
-    <!-- Remind Passowrd -->
-    <div id="formFooter">
-      <a class="underlineHover" href="#">Forgot Password?</a>
-    </div>
-
-  </div>
-</div>
 
 
     <!-- Footer Start -->
@@ -78,6 +114,24 @@ session_start();
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <script>
+      $(document).ready(function(){
+
+        $("#registerblock").hide();
+        $("#loginbtn").click(function(){
+          $("#loginblock").show();
+          $("#registerblock").hide();
+          $( "#loginbtn" ).removeClass( "inactive" ).addClass( "active" );
+          $( "#registerbtn" ).removeClass( "active" ).addClass( "inactive" );
+        });
+        $("#registerbtn").click(function(){
+          $("#loginblock").hide();
+          $("#registerblock").show();
+          $( "#loginbtn" ).removeClass( "active" ).addClass( "inactive" );
+          $( "#registerbtn" ).removeClass( "inactive" ).addClass( "active" );
+        });
+      });
+      </script>
 </body>
 
 </html>
