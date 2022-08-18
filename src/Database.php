@@ -37,4 +37,9 @@ class Database
     {
         return $this->conn->query($queryString);
     }
+
+    public function lastInsertId()
+    {
+        return $this->conn->lastInsertId();
+    }
 }

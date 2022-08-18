@@ -8,7 +8,7 @@ class Login
 
     public function __construct()
     {
-        $this->users = new Users();
+        $this->users = new CheckUserLogin();
     }
 
     public function userLogin($data)
@@ -23,6 +23,7 @@ class Login
         } else {
             $password = md5($password);
             $resultlogin = $this->users->checkUser($email, $password);
+
             if (empty($resultlogin)) {
                 $result['error'] = 'Invalid email and password';
             } else {

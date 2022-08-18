@@ -10,8 +10,7 @@ if (isset($_POST['login'])) {
     $result = $login->userLogin($_POST);
 
     if (!empty($result['success'])) {
-        print_r($result);
-        // print_r($_SESSION['userid']);
+        print_r($_SESSION['userid']);
     }
 }
 if (isset($_POST['register'])) {

@@ -2,13 +2,15 @@
 
 namespace Eshop;
 
-class Addcart
+class AddCart
 {
     private $products;
+    private $getproduct;
 
     public function __construct()
     {
-        $this->products = new Products();
+        $this->products = new ListProducts();
+        $this->getproduct = new GetSingleProduct();
     }
 
     public function addProductsToCart($getdata, $postdata)
@@ -19,12 +21,13 @@ class Addcart
             } else {
                 $quantity = $postdata['quantity'];
             }
+
             $puuid = $getdata['puuid'];
             //get product by uuid..
-            $result = $this->products->getProductInfo($puuid);
+            $result = $this->getproduct->getProductInfo($puuid);
             $pdt_info = $result->fetch();
 
-            $this->addCartToSession($pdt_info, $postdata['quantity']);
+            $this->addCartToSession($pdt_info, $quantity);
         } else {
             return 'Not found';
         }

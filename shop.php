@@ -5,10 +5,10 @@ error_reporting(E_ALL);
 // fetch all products from db ..
 
 require './vendor/autoload.php';
-use Eshop\Products;
+use Eshop\ListProducts;
 
-$products = new Products();
-$result = $products->listProducts();
+$products = new ListProducts();
+$result = $products->getAllProducts();
 ?>
 <!DOCTYPE html>
 <html lang="en">

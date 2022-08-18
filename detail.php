@@ -1,23 +1,25 @@
 <?php
 require './vendor/autoload.php';
-use Eshop\Products;
+use Eshop\GetSingleProduct;
+use Eshop\ListProducts;
 
-    if (isset($_GET['pid'])) {
-        $puuid = $_GET['pid'];
+if (isset($_GET['pid'])) {
+    $puuid = $_GET['pid'];
 
-        $products = new Products();
+    $products = new ListProducts();
+    $singleproduct = new GetSingleProduct();
 
-        //get product by uuid..
-        $result = $products->getProductInfo($puuid);
-        $pdt_info = $result->fetch();
-        $product_uuid = $pdt_info['product_uuid'];
-        $product_code = $pdt_info['product_code'];
-        $product_name = $pdt_info['product_name'];
-        $description = $pdt_info['description'];
-        $price = $pdt_info['price'];
-        $photo = $pdt_info['photo'];
-        //get list of products ..
-        $list_pdts = $products->listProducts(); ?>
+    //get product by uuid..
+    $result = $singleproduct->getProductInfo($puuid);
+    $pdt_info = $result->fetch();
+    $product_uuid = $pdt_info['product_uuid'];
+    $product_code = $pdt_info['product_code'];
+    $product_name = $pdt_info['product_name'];
+    $description = $pdt_info['description'];
+    $price = $pdt_info['price'];
+    $photo = $pdt_info['photo'];
+    //get list of products ..
+    $list_pdts = $products->getAllProducts(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -200,7 +202,7 @@ use Eshop\Products;
 
 </html>
 <?php
-    } else {
-        echo 'No product found !';
-    }
+} else {
+                        echo 'No product found !';
+                    }
 ?>

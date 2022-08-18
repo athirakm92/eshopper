@@ -8,7 +8,6 @@ class RemoveCart
 
     public function __construct()
     {
-        $this->products = new Products();
     }
 
     public function removeProductsFromCart($getdata, $postdata)
