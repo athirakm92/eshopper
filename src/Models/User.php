@@ -2,13 +2,13 @@
 
 namespace Eshop\Models;
 
-class User
+class User extends Database
 {
     private $dbconnection;
 
     public function __construct()
     {
-        $this->dbconnection = new Database();
+        parent::__construct();
     }
 
     public function insertUser($data)
@@ -16,8 +16,8 @@ class User
         $columns = implode(', ', array_keys($data));
         $values = implode("', '", $data);
 
-        $insertquery = $this->dbconnection->queryDB("INSERT INTO `users`($columns) VALUES ('$values')");
+        $insertquery = $this->queryDB("INSERT INTO `users`($columns) VALUES ('$values')");
 
-        return $this->dbconnection->lastInsertId();
+        return $this->lastInsertId();
     }
 }

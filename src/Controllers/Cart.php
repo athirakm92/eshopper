@@ -18,19 +18,16 @@ class Cart
         if (!isset($getData['puuid'])) {
             return 'Not found';
         }
-        if (isset($getData['puuid'])) {
-            $quantity = 1;
-            if (!empty($postData['quantity'])) {
-                $quantity = $postData['quantity'];
-            }
-
-            $puuid = $getData['puuid'];
-            //get product by uuid..
-            $singleProductQuery = $this->products->getProductByUUID($puuid);
-            $productInfo = $singleProductQuery->fetch();
-
-            $this->addProductsToSession($productInfo, $quantity);
+        $quantity = 1;
+        if (!empty($postData['quantity'])) {
+            $quantity = $postData['quantity'];
         }
+
+        //get product by uuid..
+        $singleProductQuery = $this->products->getProductByUUID($getData['puuid']);
+        $productInfo = $singleProductQuery->fetch();
+
+        $this->addProductsToSession($productInfo, $quantity);
 
         return true;
     }
@@ -44,14 +41,17 @@ class Cart
 
             return true;
         }
-        if ($this->checkProductsExistsInCart($productUUID)) {
-            if (empty($_SESSION['cart_item'][$productUUID]['quantity'])) {
-                $_SESSION['cart_item'][$productUUID]['quantity'] = 0;
-            }
-            $_SESSION['cart_item'][$productUUID]['quantity'] += $quantity;
-        } else {
+        if (!$this->checkProductsExistsInCart($productUUID)) {
             $_SESSION['cart_item'] = array_merge($_SESSION['cart_item'], $itemArray);
+
+            return true;
         }
+        if (empty($_SESSION['cart_item'][$productUUID]['quantity'])) {
+            $_SESSION['cart_item'][$productUUID]['quantity'] = 0;
+        }
+        $_SESSION['cart_item'][$productUUID]['quantity'] += $quantity;
+
+        return true;
     }
 
     public function checkProductsExistsInCart($productUUID)
@@ -65,14 +65,15 @@ class Cart
 
     public function removeProductsFromCart($getData)
     {
-        if (!empty($_SESSION['cart_item'])) {
-            foreach ($_SESSION['cart_item'] as $k => $v) {
-                if ($getData['puuid'] == $k) {
-                    unset($_SESSION['cart_item'][$k]);
-                }
-                if (empty($_SESSION['cart_item'])) {
-                    unset($_SESSION['cart_item']);
-                }
+        if (empty($_SESSION['cart_item'])) {
+            return true;
+        }
+        foreach ($_SESSION['cart_item'] as $k => $v) {
+            if ($getData['puuid'] == $k) {
+                unset($_SESSION['cart_item'][$k]);
+            }
+            if (empty($_SESSION['cart_item'])) {
+                unset($_SESSION['cart_item']);
             }
         }
 

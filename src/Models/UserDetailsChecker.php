@@ -2,26 +2,24 @@
 
 namespace Eshop\Models;
 
-class UserDetailsChecker
+class UserDetailsChecker extends Database
 {
-    private $dbconnection;
-
     public function __construct()
     {
-        $this->dbconnection = new Database();
+        parent::__construct();
     }
 
     public function checkUserEmail($email)
     {
-        $result = $this->dbconnection->queryDB("select id, user_uuid FROM users WHERE email='".$email."'");
-        $rowcount = $this->dbconnection->lastInsertId();
+        $result = $this->queryDB("select id, user_uuid FROM users WHERE email='".$email."'");
+        $rowcount = $this->lastInsertId();
 
         return $rowcount;
     }
 
     public function checkUserEmailAndPassword($email, $password)
     {
-        $result = $this->dbconnection->queryDB("select id, user_uuid FROM users WHERE email='".$email."' and password='".$password."'");
+        $result = $this->queryDB("select id, user_uuid FROM users WHERE email='".$email."' and password='".$password."'");
         $userinfo = [];
         $rowcount = $result->rowCount();
 
