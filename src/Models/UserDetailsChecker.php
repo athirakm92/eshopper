@@ -1,8 +1,8 @@
 <?php
 
-namespace Eshop;
+namespace Eshop\Models;
 
-class CheckUserLogin
+class UserDetailsChecker
 {
     private $dbconnection;
 
@@ -11,7 +11,15 @@ class CheckUserLogin
         $this->dbconnection = new Database();
     }
 
-    public function checkUser($email, $password)
+    public function checkUserEmail($email)
+    {
+        $result = $this->dbconnection->queryDB("select id, user_uuid FROM users WHERE email='".$email."'");
+        $rowcount = $this->dbconnection->lastInsertId();
+
+        return $rowcount;
+    }
+
+    public function checkUserEmailAndPassword($email, $password)
     {
         $result = $this->dbconnection->queryDB("select id, user_uuid FROM users WHERE email='".$email."' and password='".$password."'");
         $userinfo = [];

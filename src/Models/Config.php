@@ -1,6 +1,6 @@
 <?php
 
-namespace Eshop;
+namespace Eshop\Models;
 
 class Config
 {

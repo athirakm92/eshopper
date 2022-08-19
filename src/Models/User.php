@@ -1,8 +1,8 @@
 <?php
 
-namespace Eshop;
+namespace Eshop\Models;
 
-class AddUser
+class User
 {
     private $dbconnection;
 

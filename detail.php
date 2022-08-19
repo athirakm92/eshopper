@@ -1,25 +1,17 @@
 <?php
 require './vendor/autoload.php';
-use Eshop\GetSingleProduct;
-use Eshop\ListProducts;
+use Eshop\Controllers\ProductsController;
 
 if (isset($_GET['pid'])) {
     $puuid = $_GET['pid'];
 
-    $products = new ListProducts();
-    $singleproduct = new GetSingleProduct();
+    $products = new ProductsController();
 
     //get product by uuid..
-    $result = $singleproduct->getProductInfo($puuid);
-    $pdt_info = $result->fetch();
-    $product_uuid = $pdt_info['product_uuid'];
-    $product_code = $pdt_info['product_code'];
-    $product_name = $pdt_info['product_name'];
-    $description = $pdt_info['description'];
-    $price = $pdt_info['price'];
-    $photo = $pdt_info['photo'];
+    $productInfo = $products->fetchSingleProduct($puuid);
+
     //get list of products ..
-    $list_pdts = $products->getAllProducts(); ?>
+    $list_pdts = $products->fetchAllProducts(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,7 +44,7 @@ if (isset($_GET['pid'])) {
                 <div id="product-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner border">
                         <div class="carousel-item active">
-                            <img class="w-100 h-100" src="img/watch/<?php echo $photo; ?>" alt="Image">
+                            <img class="w-100 h-100" src="img/watch/<?php echo $productInfo['photo']; ?>" alt="Image">
                         </div>
                         
                     </div>
@@ -61,7 +53,7 @@ if (isset($_GET['pid'])) {
             </div>
 
             <div class="col-lg-7 pb-5">
-                <h3 class="font-weight-semi-bold"><?php echo $product_name; ?></h3>
+                <h3 class="font-weight-semi-bold"><?php echo $productInfo['product_name']; ?></h3>
                 <div class="d-flex mb-3">
                     <div class="text-primary mr-2">
                         <small class="fas fa-star"></small>
@@ -72,10 +64,10 @@ if (isset($_GET['pid'])) {
                     </div>
                     <small class="pt-1">(50 Reviews)</small>
                 </div>
-                <h3 class="font-weight-semi-bold mb-4">$<?php echo $price; ?></h3>
-                <p class="mb-4"><?php echo $description; ?></p>
+                <h3 class="font-weight-semi-bold mb-4">$<?php echo $productInfo['price']; ?></h3>
+                <p class="mb-4"><?php echo $productInfo['description']; ?></p>
                 
-                <form action="addtocart.php?action=add&puuid=<?php echo $product_uuid; ?>" method="post">
+                <form action="addtocart.php?action=add&puuid=<?php echo $productInfo['product_uuid']; ?>" method="post">
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <div class="input-group quantity mr-3" style="width: 130px;">
                             <div class="input-group-btn">
@@ -164,7 +156,7 @@ if (isset($_GET['pid'])) {
                             </div>
                             <div class="card-footer d-flex justify-content-between bg-light border">
                                 <a href="detail.php?pid=<?php echo $row['product_uuid']; ?>" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                                <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                                <a href="addtocart.php?action=add&puuid=<?php echo $row['product_uuid']; ?>" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                             </div>
                         </div>
                     <?php

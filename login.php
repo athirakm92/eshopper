@@ -2,12 +2,12 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 require './vendor/autoload.php'; session_start();
-use Eshop\Login;
-use Eshop\Register;
+use Eshop\Controllers\Login;
+use Eshop\Controllers\Register;
 
 if (isset($_POST['login'])) {
     $login = new Login();
-    $result = $login->userLogin($_POST);
+    $result = $login->checkUserAndSetSession($_POST);
 
     if (!empty($result['success'])) {
         print_r($_SESSION['userid']);
